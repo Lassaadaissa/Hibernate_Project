@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+
+
+
+	<security:http pattern="/faces/login/**" security="none"></security:http>
+	<security:http use-expressions="true">
+
+		<security:intercept-url pattern="/faces/admin/**"
+			access="hasRole('ROLE_ADMIN')" />
+
+		<security:intercept-url pattern="/faces/user/**"
+			access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" />
+
+		
+
+		<security:intercept-url pattern="/faces/Views/index.xhtml"
+			access="isAuthenticated()" />
+
+		<security:form-login login-processing-url="/faces/j_spring_security_check"
+			login-page="/faces/login/Login.xhtml" authentication-failure-url="/faces/login/fail.xhtml"
+			default-target-url="/faces/Views/index.xhtml" username-parameter="j_username"
+			password-parameter="j_password" />
+<!--  default target url conception facebook revenir sur la page index -->
+	</security:http>
+
+	<security:authentication-manager>
+		<security:authentication-provider>
+			<security:user-service>
+
+				<security:user name="aissa" password="aissa"
+					authorities="ROLE_ADMIN,ROLE_USER" />
+				<security:user name="lassaad" password="aissa"
+					authorities="ROLE_USER" />
+			</security:user-service>
+		</security:authentication-provider>
+	</security:authentication-manager> 
+
+<!-- 
+<security:authentication-manager>
+<security:authentication-provider>
+<security:jdbc-user-service data-source-ref="mysqlDS" authorities-by-username-query="select username,role from users where username=?"/>
+</security:authentication-provider>
+</security:authentication-manager>
+
+
+	<bean name="mysqlDS" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+		<property name="url" value="jdbc:mysql://localhost:3306/formation_db"></property>
+		<property name="username" value="root"></property>
+		<property name="password" value=""></property>
+	</bean>
+-->
+</beans>

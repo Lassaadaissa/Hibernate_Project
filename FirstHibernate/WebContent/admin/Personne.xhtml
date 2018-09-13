@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"> 
+
+<h:head></h:head> 
+<h:body> 
+<h:form>
+<h:panelGrid columns="2">
+<h:outputText value="CIN" />
+<h:inputText value="#{personneBean.pers.cin}" readonly="#{personneBean.read}" />
+<h:outputText value="NOM" />
+<h:inputText value="#{personneBean.pers.nom}" />
+<h:outputText value="Prenom" />
+<h:inputText value="#{personneBean.pers.prenom}" />
+<h:outputText value="EMAIL" />
+<h:inputText value="#{personneBean.pers.EMail}" />
+<h:outputText value="TEL" />
+<h:inputText value="#{personneBean.pers.telephone}" />
+
+<h:commandButton action="#{personneBean.ajouter()}" rendered="#{personneBean.btnAdd}" value="ajouter" />
+<h:commandButton action="#{personneBean.modifier()}" rendered="#{personneBean.btnEdit}" value="modifier" />
+<h:commandButton  action="#{personneBean.annuler()}"  value="annuler" />
+
+</h:panelGrid>
+<h:dataTable value="#{personneBean.list}" var="pers"> 
+   <h:column>
+   <f:facet name="header">CIN</f:facet>
+   <h:outputText value="#{pers.cin}" />
+   </h:column>
+   <h:column>
+   <f:facet name="header">NOM</f:facet>
+   <h:outputText value="#{pers.nom}" />
+   </h:column>
+   <h:column>
+   <f:facet name="header">PRENOM</f:facet>
+   <h:outputText value="#{pers.prenom}" />
+   </h:column>
+   <h:column>
+   <f:facet name="header">E_MAIL</f:facet>
+   <h:outputText value="#{pers.EMail}" />
+   </h:column>
+   <h:column>
+   <f:facet name="header">TELEPHONE</f:facet>
+   <h:outputText value="#{pers.telephone}" />
+   </h:column>
+   <h:column>
+    <f:facet name="header">Action</f:facet>
+   <h:commandButton action="#{personneBean.supprimer()}" value="supprimer" onclick="return confirm('Voulez Vous supprimer')">
+   <f:setPropertyActionListener value="#{pers}" target="#{personneBean.pers}" />
+   </h:commandButton>
+   
+   <h:commandButton action="#{personneBean.clickEdit()}" value="Editer">
+   <f:setPropertyActionListener value="#{pers}" target="#{personneBean.pers}" />
+   </h:commandButton>
+   </h:column>
+
+
+
+   </h:dataTable>
+</h:form>
+</h:body> 
+</html>

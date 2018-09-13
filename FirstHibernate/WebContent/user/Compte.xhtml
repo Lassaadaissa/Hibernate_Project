@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<h:head></h:head>
+<body>
+
+	<h:form id="f1">
+		<p:commandButton value="Ajouter" onclick="PF('dlg').show()" action="#{compteBean.clickAdd()}" update="panel"></p:commandButton>
+
+
+		<p:dataTable value="#{compteBean.list}" var="cpt" id="tab">
+			<p:column headerText="Numéro compte">
+				<h:outputText value="#{cpt.id}" />
+			</p:column>
+			<p:column headerText="Personne compte">
+				<h:outputText value="#{cpt.personne.nom} ##{cpt.personne.prenom}" />
+			</p:column>
+			<p:column headerText="Solde compte">
+				<h:outputText value="#{cpt.solde}" />
+			</p:column>
+			<p:column headerText="Type Compte">
+				<h:outputText value="#{cpt.type}" />
+			</p:column>
+
+			<p:column headerText="Action">
+				<p:commandButton action="#{compteBean.supprimer()}"
+					value="supprimer">
+					<p:confirm header="Confirmation" message="Are you sure?"
+						icon="ui-icon-alert" />
+					<f:setPropertyActionListener value="#{cpt}"
+						target="#{compteBean.cpt}" />
+				</p:commandButton>
+
+				<p:commandButton action="#{compteBean.clickEdit()}" value="Editer"
+					onclick="PF('dlg').show();" update=":f1:panel">
+					<f:setPropertyActionListener value="#{cpt}" 
+					target="#{compteBean.cpt}"/>
+				</p:commandButton>
+
+			</p:column>
+
+
+
+		</p:dataTable>
+
+		<p:dialog widgetVar="dlg">
+			<h:panelGrid columns="2" id="panel">
+				<h:outputText value="Client" />
+				<p:selectOneMenu filter="true" filterMatchMode="contains"
+					value="#{compteBean.persn.cin}">
+					<f:selectItems value="#{personneBean.list}" var="pers"
+						itemLabel="#{pers.nom} #{pers.prenom}" itemValue="#{pers.cin}" />
+
+
+
+				</p:selectOneMenu>
+				<h:outputText value="Type" />
+				<h:selectOneMenu value="#{compteBean.cpt.type}">
+					<f:selectItem itemLabel="Courant" itemValue="Courant" />
+					<f:selectItem itemLabel="Cheque" itemValue="Cheque" />
+					<f:selectItem itemLabel="Epargne" itemValue="Epargne" />
+				</h:selectOneMenu>
+				<h:outputText value="Solde" />
+				<p:inputText value="#{compteBean.cpt.solde}">
+					<p:keyFilter regEx="/[0-9]/i" />
+				</p:inputText>
+				
+				
+				<p:commandButton value="Ajouter" action="#{compteBean.ajouter()}"
+					update="tab" oncomplete="PF('dlg').hide();" rendered="#{compteBean.btnAdd}"></p:commandButton>
+					
+					<p:commandButton value="Modifier" action="#{compteBean.modifier()}"
+					update="tab" oncomplete="PF('dlg').hide();" rendered="#{compteBean.btnEdit}"></p:commandButton>
+					
+				<p:commandButton value="Annuler" oncomplete="PF('dlg').hide();" rendered="#{compteBean.btnEdit}"></p:commandButton>
+			</h:panelGrid>
+		</p:dialog>
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			<p:commandButton value="Yes" type="button"
+				styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+			<p:commandButton value="No" type="button"
+				styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		</p:confirmDialog>
+		
+		<p:growl autoUpdate="true" showDetail="true"></p:growl>
+	</h:form>
+
+</body>
+</html>
